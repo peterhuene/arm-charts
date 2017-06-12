@@ -1,0 +1,85 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+    spec:
+      containers:
+      - name: {{ template "fullname" . }}
+        image: "{{ .Values.image }}"
+        imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
+        env:
+        - name: GHOST_ENVIRONMENT
+          value: production
+        - name: GHOST_DATABASE_TYPE
+          value: mysql
+        - name: GHOST_URL
+          value: {{ required "A Ghost URL value is required." .Values.ghostUrl | quote }}
+        - name: GHOST_DATABASE_HOST
+          value: {{ template "mariadb.fullname" . }}
+        - name: GHOST_DATABASE_USER
+          value: root
+        - name: GHOST_DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "mariadb.fullname" . }}
+              key: mariadb-root-password
+        - name: GHOST_SMTP_HOST
+          value: {{ default "" .Values.smtpHost | quote }}
+        - name: GHOST_SMTP_PORT
+          value: {{ default "" .Values.smtpPort | quote }}
+        - name: GHOST_SMTP_USER
+          value: {{ default "" .Values.smtpUser | quote }}
+        - name: GHOST_SMTP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: ghost-smtp-password
+        - name: GHOST_SMTP_SERVICE
+          value: {{ default "" .Values.smtpService | quote }}
+        ports:
+        - name: http
+          containerPort: 2368
+        livenessProbe:
+          httpGet:
+            path: /ghost
+            port: http
+            httpHeaders:
+            - name: Host
+              value: {{ include "host" . | quote }}
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
+          failureThreshold: 6
+        readinessProbe:
+          httpGet:
+            path: /ghost
+            port: http
+            httpHeaders:
+            - name: Host
+              value: {{ include "host" . | quote }}
+          initialDelaySeconds: 30
+          timeoutSeconds: 3
+          periodSeconds: 5
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+        volumeMounts:
+        - name: ghost-data
+          mountPath: /var/lib/ghost
+      volumes:
+      - name: ghost-data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ template "fullname" . }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}

@@ -1,0 +1,21 @@
+name: ghost
+version: 0.1.0
+appVersion: 1.0.0-beta.1
+description: A simple, powerful publishing platform that allows you to share your stories with the world
+keywords:
+- ghost
+- blog
+- http
+- web
+- application
+- nodejs
+- javascript
+- arm
+home: http://www.ghost.org/
+icon: https://bitnami.com/assets/stacks/ghost/img/ghost-stack-220x234.png
+sources:
+- https://github.com/peterhuene/arm-charts/tree/master/stable/ghost
+maintainers:
+- name: Peter Huene
+  email: peter@segfault.guru
+engine: gotpl

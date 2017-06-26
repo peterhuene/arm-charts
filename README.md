@@ -12,7 +12,7 @@ At the time of this writing, Helm does not support installing on ARMv7 via the i
 However, an ARMv7 build of Helm can be installed manually:
 
 ```
-$ export HELM_VERSION=v2.4.1
+$ export HELM_VERSION=v2.5.0
 $ export HELM_INSTALL_DIR=~/bin
 $ wget https://kubernetes-helm.storage.googleapis.com/helm-$HELM_VERSION-linux-arm.tar.gz
 $ tar xvzf helm-$HELM_VERSION-linux-arm.tar.gz
@@ -34,7 +34,7 @@ To instruct Helm to install an ARMv7 Tiller image:
 $ helm init --tiller-image=peterhuene/tiller-arm:$HELM_VERSION
 ```
 
-Note: currently an ARMv7 Tiller image has been built for Helm version `v2.4.1`.
+Note: currently an ARMv7 Tiller image has been built for Helm version `v2.4.1` and `v2.5.0`.
 
 To confirm Helm is now installed correctly, run `helm version` after the tiller pod has deployed:
 
@@ -44,7 +44,20 @@ Client: &version.Version{SemVer:"v2.4.1", GitCommit:"46d9ea82e2c925186e1fc620a83
 Server: &version.Version{SemVer:"v2.4.1", GitCommit:"46d9ea82e2c925186e1fc620a8320ce1314cbb02", GitTreeState:"clean"}
 ```
 
-## Using These Charts
+## Adding the ARM chart repository
 
-[Comming Soon]
+Add the ARM chart repository to Helm:
+
+```
+$ helm repo add arm-stable https://peterhuene.github.io/arm-charts/stable
+"arm-stable" has been added to your repositories
+```
+
+## Installing ARM charts
+
+Use Helm to install ARM charts:
+
+```
+$ helm install arm-stable/mariadb
+```
 

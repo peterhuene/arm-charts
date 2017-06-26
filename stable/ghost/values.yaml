@@ -1,0 +1,68 @@
+## Ghost image version
+## ref: https://hub.docker.com/r/peterhuene/ghost-arm/tags/
+##
+image: peterhuene/ghost-arm:1.0.0-beta.1
+
+## Specify a imagePullPolicy
+## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+##
+# imagePullPolicy:
+
+## Ghost URL
+## ref: https://docs.ghost.org/docs/configuring-ghost#section-configuration-options
+##
+# ghostUrl:
+
+## Ghost port to create application URLs.
+## ref: https://docs.ghost.org/docs/configuring-ghost#section-configuration-options
+##
+ghostPort: 2368
+
+## Kubernetes configuration
+##
+serviceType: NodePort
+
+## loadBalancerIP for the Ghost Service (optional, cloud specific)
+## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+##
+# loadBalancerIP:
+
+## SMTP mail delivery configuration
+## ref: https://docs.ghost.org/v1.0.0/docs/mail-configuration-on-self-hosted-version-of-ghost
+##
+# smtpHost:
+# smtpPort:
+# smtpUser:
+# smtpPassword:
+# smtpService:
+
+## MariaDB chart configuration
+##
+mariadb:
+  usePassword: true
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    enabled: true
+    # storageClass: 
+    accessMode: ReadWriteOnce
+    size: 8Gi
+
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  enabled: true
+  # storageClass: 
+  accessMode: ReadWriteOnce
+  size: 8Gi
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  requests:
+    memory: 512Mi
+    cpu: 300m

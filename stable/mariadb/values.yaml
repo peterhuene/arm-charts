@@ -1,0 +1,67 @@
+## MariaDB image version
+## ref: https://hub.docker.com/r/peterhuene/mariadb-arm/tags
+##
+## Default: none
+image: peterhuene/mariadb-arm:10.1.22
+
+## Specify an imagePullPolicy (Required)
+## It's recommended to change this to 'Always' if the image tag is 'latest'
+## ref: http://kubernetes.io/docs/user-guide/images/#updating-images
+imagePullPolicy: IfNotPresent
+
+## Use password authentication
+usePassword: true
+
+## Specify password for root user
+##
+# mariadbRootPassword:
+
+## Create a database user
+##
+# mariadbUser:
+# mariadbPassword:
+
+## Create a database
+##
+# mariadbDatabase:
+
+## Kubernetes service type
+serviceType: ClusterIP
+
+## Initial delay of readiness probe, in seconds
+readinessProbeDelay: 5
+
+## Initial delay of liveness probe, in seconds
+livenessProbeDelay: 30
+
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  enabled: true
+  
+  ## A manually managed Persistent Volume and Claim
+  ## Requires persistence.enabled: true
+  ## If defined, PVC must be created manually before volume will be bound
+  # existingClaim:
+
+  ## If defined, volume.beta.kubernetes.io/storage-class: <storageClass>
+  ##
+  # storageClass:
+  accessMode: ReadWriteOnce
+  size: 8Gi
+
+## Configure MariaDB with a custom my.cnf file
+## ref: https://mariadb.com/kb/en/mariadb/configuring-mariadb-with-mycnf/#example-of-configuration-file
+##
+# config: |-
+  # [mysqld]
+  # innodb_buffer_pool_size=2G
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  requests:
+    memory: 256Mi
+    cpu: 250m
